@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">TODO List</string>
     <string name="header">Мои дела</string>
-    <string name="done">Выполнено - $num_of_done</string>
+    <string name="done">Выполнено - ${num_of_done}</string>
 </resources>
