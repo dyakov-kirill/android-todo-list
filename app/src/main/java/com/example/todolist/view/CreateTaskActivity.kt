@@ -1,14 +1,15 @@
-package com.example.todolist
+package com.example.todolist.view
 
 import android.R
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import com.example.todolist.data.TodoItemsRepository
+import com.example.todolist.model.TodoItem
 import com.example.todolist.databinding.ActivityCreateTaskBinding
-import java.time.LocalDate
+import com.example.todolist.model.Utils
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -22,8 +23,8 @@ class CreateTaskActivity() : AppCompatActivity() {
     val day = c.get(Calendar.DAY_OF_MONTH)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityCreateTaskBinding.inflate(layoutInflater)
+       super.onCreate(savedInstanceState)
+        /*binding = ActivityCreateTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val spinnerArray: MutableList<String> = ArrayList()
 
@@ -41,9 +42,12 @@ class CreateTaskActivity() : AppCompatActivity() {
             finish()
         }
         binding.buttonSave.setOnClickListener {
-            repository.addTask(TodoItem(TodoItemsRepository.tasks.size.toString(), binding.editTextInfo.text.toString(), Utils.Importance.fromInt(binding.spinnerImportance.selectedItemPosition),
+            repository.addTask(
+                TodoItem(
+                    TodoItemsRepository.tasks.size.toString(), binding.editTextInfo.text.toString(), Utils.Importance.fromInt(binding.spinnerImportance.selectedItemPosition),
             Utils.Flag.NOT_DONE, c.time,
-                Calendar.getInstance().time, Calendar.getInstance().time))
+                Calendar.getInstance().time, Calendar.getInstance().time)
+            )
             finish()
         }
 
@@ -60,7 +64,7 @@ class CreateTaskActivity() : AppCompatActivity() {
                     c.get(Calendar.DAY_OF_MONTH)).show()
 
             }
-        }
+        }*/
 
 
     }

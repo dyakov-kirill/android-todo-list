@@ -1,9 +1,10 @@
-package com.example.todolist
+package com.example.todolist.data
 
 import androidx.lifecycle.MutableLiveData
-import java.time.LocalDate
+import com.example.todolist.view.RecyclerViewAdapter
+import com.example.todolist.model.TodoItem
+import com.example.todolist.model.Utils
 import java.util.*
-import kotlin.collections.ArrayList
 
 object TodoItemsRepository {
     var tasks = mutableListOf<TodoItem>(

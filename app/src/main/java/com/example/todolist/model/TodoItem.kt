@@ -1,6 +1,6 @@
-package com.example.todolist
+package com.example.todolist.model
 
-import java.time.LocalDate
+import com.example.todolist.model.Utils
 import java.util.*
 
 data class TodoItem(

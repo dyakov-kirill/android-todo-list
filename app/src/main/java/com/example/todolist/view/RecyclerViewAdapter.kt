@@ -1,13 +1,11 @@
-package com.example.todolist
+package com.example.todolist.view
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todolist.data.TodoItemsRepository
+import com.example.todolist.model.TodoItem
 import com.example.todolist.databinding.TaskCellBinding
 
 class RecyclerViewAdapter(private val dataSet: List<TodoItem>) :
