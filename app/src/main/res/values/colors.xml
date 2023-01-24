@@ -7,4 +7,45 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Light theme colors -->
+
+    <color name="separator_light">#33000000</color>
+    <color name="overlay_light">#0F000000</color>
+
+    <color name="primary_label_light">#000000</color>
+    <color name="secondary_label_light">#99000000</color>
+    <color name="tertiary_label_light">#4D000000</color>
+    <color name="disable_label_light">#26000000</color>
+
+    <color name="red_light">#FF3B30</color>
+    <color name="green_light">#34C759</color>
+    <color name="blue_light">#007AFF</color>
+    <color name="gray_light">#8E8E93</color>
+    <color name="grayl_light">#D1D1D6</color>
+
+    <color name="primary_back_light">#F7F6F2</color>
+    <color name="secondary_back_light">#FFFFFF</color>
+    <color name="elevated_back_light">#FFFFFF</color>
+
+    <!-- Dark theme colors -->
+
+    <color name="separator_dark">#33FFFFFF</color>
+    <color name="overlay_dark">#52000000</color>
+
+    <color name="primary_label_dark">#FFFFFF</color>
+    <color name="secondary_label_dark">#99FFFFFF</color>
+    <color name="tertiary_label_dark">#66FFFFFF</color>
+    <color name="disable_label_dark">#26FFFFFF</color>
+
+    <color name="red_dark">#FF453A</color>
+    <color name="green_dark">#32D74B</color>
+    <color name="blue_dark">#0A84FF</color>
+    <color name="gray_dark">#8E8E93</color>
+    <color name="grayl_dark">#48484A</color>
+
+    <color name="primary_back_dark">#161618</color>
+    <color name="secondary_back_dark">#252528</color>
+    <color name="elevated_back_dark">#3C3C3f</color>
+
 </resources>

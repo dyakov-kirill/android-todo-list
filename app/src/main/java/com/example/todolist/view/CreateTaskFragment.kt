@@ -28,7 +28,6 @@ class CreateTaskFragment(parentFragment: ListFragment) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -84,6 +83,8 @@ class CreateTaskFragment(parentFragment: ListFragment) : Fragment() {
         super.onDestroy()
         Log.d("MyLog", "Destroyed task fragment")
     }
+
+
 
     private fun closeFragment() {
         requireActivity().supportFragmentManager.beginTransaction()

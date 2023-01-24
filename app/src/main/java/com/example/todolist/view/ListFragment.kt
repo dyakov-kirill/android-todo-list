@@ -33,7 +33,7 @@ class ListFragment : Fragment() {
         repository.adapter = adapter
 
         repository.numOfDone.observe(viewLifecycleOwner, Observer {
-           binding.textViewDone.text = it.toString()
+           binding.textViewDone.text = String.format(resources.getString(R.string.done), it)//it.toString()
        })
 
         val manager = LinearLayoutManager(context)

@@ -17,26 +17,41 @@
             android:id="@+id/textViewHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
             android:text="@string/header"
-            android:textAlignment="center"
-            android:textSize="24sp"
+            android:textAlignment="textStart"
+            android:textColor="?android:attr/textColor"
+            android:textSize="34sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewDone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
             android:text="@string/done"
-            android:textAlignment="center" />
+            android:textAlignment="textStart"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="16sp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="20dp">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="?attr/cardBackgroundColor"
+            app:cardCornerRadius="10dp">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
@@ -46,9 +61,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:contentDescription="AAA"
-        android:src="@drawable/ic_launcher_background"
+        android:contentDescription="Add new task"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/blue_dark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="30dp"
+        app:tint="@color/white" />
 
 </FrameLayout>

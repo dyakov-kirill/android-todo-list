@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
@@ -69,8 +70,14 @@ class EditTaskFragment(parentFragment: ListFragment, private val taskPosition: I
             binding.switchDeadline.isChecked = true
         }
 
+        binding.imageButton2.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_dark))
+        binding.textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_light))
 
-
+        binding.deleteLayout.setOnClickListener {
+            repository.tasks.removeAt(taskPosition)
+            repository.adapter.notifyItemRemoved(taskPosition)
+            closeFragment()
+        }
 
         return binding.root
     }
