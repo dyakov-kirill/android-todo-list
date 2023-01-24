@@ -1,6 +1,5 @@
 package com.example.todolist.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,12 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.data.TodoItemsRepository
 import com.example.todolist.databinding.FragmentListBinding
+import com.example.todolist.model.TodoItem
 
 
 class ListFragment : Fragment() {
-    lateinit var binding : FragmentListBinding
-    var repository = TodoItemsRepository
-    lateinit var adapter : RecyclerViewAdapter
+    private lateinit var binding : FragmentListBinding
+    private var repository = TodoItemsRepository
+    private lateinit var adapter : RecyclerViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -27,25 +28,26 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListBinding.inflate(inflater)
+        val tasks = repository.getTaskList()
+        adapter = RecyclerViewAdapter(tasks, ::openEditor)
+        repository.adapter = adapter
+
         repository.numOfDone.observe(viewLifecycleOwner, Observer {
            binding.textViewDone.text = it.toString()
        })
 
-        val tasks = repository.getTaskList()
-        adapter = RecyclerViewAdapter(tasks)
-        repository.adapter = adapter
         val manager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = manager
         binding.recyclerView.adapter = adapter
+
         binding.createTaskButton.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .hide(this)
-                .commit()
+            closeFragment()
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .add(R.id.fragmentPlaceHolder, TaskFragment(this))
+                .add(R.id.fragmentPlaceHolder, CreateTaskFragment(this))
                 .commit()
         }
+
         return binding.root
     }
 
@@ -63,4 +65,21 @@ class ListFragment : Fragment() {
         @JvmStatic
         fun newInstance() = ListFragment()
     }
+
+    private fun closeFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .hide(this)
+            .commit()
+
+    }
+
+    fun openEditor(task: Int) {
+        closeFragment()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            .add(R.id.fragmentPlaceHolder, EditTaskFragment(this, task))
+            .commit()
+    }
+
+
 }

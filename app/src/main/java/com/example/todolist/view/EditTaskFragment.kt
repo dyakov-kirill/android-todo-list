@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.data.TodoItemsRepository
 import com.example.todolist.databinding.FragmentListBinding
@@ -17,20 +19,15 @@ import com.example.todolist.model.TodoItem
 import com.example.todolist.model.Utils
 import java.util.*
 
-class TaskFragment(parentFragment: ListFragment) : Fragment() {
-    lateinit var binding : FragmentTaskBinding
 
-    var repository = TodoItemsRepository
-    var listFragment = parentFragment
-
-    val c = Calendar.getInstance()
-    val year = c.get(Calendar.YEAR)
-    val month = c.get(Calendar.MONTH)
-    val day = c.get(Calendar.DAY_OF_MONTH)
+class EditTaskFragment(parentFragment: ListFragment, private val taskPosition: Int) : Fragment() {
+    private lateinit var binding : FragmentTaskBinding
+    private var repository = TodoItemsRepository
+    private var listFragment = parentFragment
+    private var task = repository.tasks[taskPosition]
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -38,9 +35,22 @@ class TaskFragment(parentFragment: ListFragment) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTaskBinding.inflate(inflater)
+        val tasks = repository.getTaskList()
         binding.buttonClose.setOnClickListener {
             closeFragment()
         }
+        binding.buttonSave.setOnClickListener {
+            task.info = binding.editTextInfo.text.toString()
+            task.editDate = Calendar.getInstance().time
+            repository.adapter.notifyItemChanged(taskPosition)
+            closeFragment()
+        }
+
+        binding.switchDeadline.setOnCheckedChangeListener { button, checked ->
+
+
+        }
+
         val spinnerArray: MutableList<String> = ArrayList()
 
         spinnerArray.add("Низкая")
@@ -53,41 +63,34 @@ class TaskFragment(parentFragment: ListFragment) : Fragment() {
         val sItems: Spinner = binding.spinnerImportance
         sItems.adapter = adapter
 
-
-        binding.buttonSave.setOnClickListener {
-            repository.addTask(
-                TodoItem(
-                    TodoItemsRepository.tasks.size.toString(), binding.editTextInfo.text.toString(), Utils.Importance.fromInt(binding.spinnerImportance.selectedItemPosition),
-                    Utils.Flag.NOT_DONE, c.time,
-                    Calendar.getInstance().time, Calendar.getInstance().time)
-            )
-            closeFragment()
+        binding.spinnerImportance.setSelection(task.importance.value)
+        binding.editTextInfo.setText(task.info)
+        if (task.deadline != null) {
+            binding.switchDeadline.isChecked = true
         }
 
-        binding.switchDeadline.setOnCheckedChangeListener { button, checked ->
-            if (checked) {
-                val listener = DatePickerDialog.OnDateSetListener { view, year, month, day ->
-                    c.set(Calendar.YEAR, year)
-                    c.set(Calendar.MONTH, month)
-                    c.set(Calendar.DAY_OF_MONTH, day)
-                }
-                DatePickerDialog(requireContext(), listener,
-                    c.get(Calendar.YEAR),
-                    c.get(Calendar.MONTH),
-                    c.get(Calendar.DAY_OF_MONTH)).show()
 
-            }
-            closeFragment()
-        }
+
+
         return binding.root
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("MyLog", "Destroyed task fragment")
+        Log.d("MyLog", "Destroyed edit fragment")
     }
 
-    fun closeFragment() {
+    override fun onPause() {
+        super.onPause()
+        Log.d("MyLog", "Paused edit fragment")
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = ListFragment()
+    }
+
+    private fun closeFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
             .remove(this).commit()

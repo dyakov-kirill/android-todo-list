@@ -8,13 +8,20 @@ import com.example.todolist.data.TodoItemsRepository
 import com.example.todolist.model.TodoItem
 import com.example.todolist.databinding.TaskCellBinding
 
-class RecyclerViewAdapter(private val dataSet: List<TodoItem>) :
+class RecyclerViewAdapter(private val dataSet: List<TodoItem>,
+                          val listenerOpen: (taskPos: Int) -> Unit) :
     RecyclerView.Adapter<RecyclerViewAdapter.TaskHolder>() {
 
-    class TaskHolder(private val binding: TaskCellBinding, ) : RecyclerView.ViewHolder(binding.root) {
+    class TaskHolder(private val binding: TaskCellBinding,
+                     val listenerOpen: (taskPos: Int) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            // Define click listener for the ViewHolder's View
+
+            binding.button2.setOnClickListener {
+                listenerOpen(adapterPosition)
+            }
+
             binding.checkBox2.setOnCheckedChangeListener { button, isChecked ->
                 if (isChecked) {
                     val a = TodoItemsRepository.numOfDone.value
@@ -41,13 +48,10 @@ class RecyclerViewAdapter(private val dataSet: List<TodoItem>) :
         // Create a new view, which defines the UI of the list item
         val view = TaskCellBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         Log.d("MyLog", "Holder created")
-        return TaskHolder(view)
+        return TaskHolder(view, listenerOpen)
     }
 
     override fun onBindViewHolder(taskHolder: TaskHolder, position: Int) {
-
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
         taskHolder.bind(dataSet[position])
         Log.d("MyLog", "Task binded")
 

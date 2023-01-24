@@ -8,7 +8,7 @@ data class TodoItem(
     var info: String,
     var importance: Utils.Importance,
     var flag: Utils.Flag,
-    var deadline: Date,
+    var deadline: Date?,
     var createDate: Date,
     var editDate: Date
     )
