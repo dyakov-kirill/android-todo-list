@@ -2,7 +2,6 @@ package com.example.todolist.view
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,91 +9,113 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.ViewModelProvider
 import com.example.todolist.R
-import com.example.todolist.data.TodoItemsRepository
-import com.example.todolist.databinding.FragmentListBinding
 import com.example.todolist.databinding.FragmentTaskBinding
-import com.example.todolist.model.TodoItem
 import com.example.todolist.model.Utils
+import com.example.todolist.viewmodel.EditTaskViewModel
+import java.text.SimpleDateFormat
 import java.util.*
 
 
-class EditTaskFragment(parentFragment: ListFragment, private val taskPosition: Int) : Fragment() {
+class EditTaskFragment(private val listFragment: ListFragment, private val taskPosition: Int, private val listeners: ClickListeners) : Fragment() {
     private lateinit var binding : FragmentTaskBinding
-    private var repository = TodoItemsRepository
-    private var listFragment = parentFragment
-    private var task = repository.tasks[taskPosition]
+
+    private lateinit var viewModel : EditTaskViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(EditTaskViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTaskBinding.inflate(inflater)
-        val tasks = repository.getTaskList()
-        binding.buttonClose.setOnClickListener {
-            closeFragment()
-        }
-        binding.buttonSave.setOnClickListener {
-            task.info = binding.editTextInfo.text.toString()
-            task.editDate = Calendar.getInstance().time
-            repository.adapter.notifyItemChanged(taskPosition)
-            closeFragment()
-        }
+        viewModel.task = viewModel.repository.tasks[taskPosition]
+        setDefaultValues()
+        setListeners()
+        setSpinner()
 
-        binding.switchDeadline.setOnCheckedChangeListener { button, checked ->
-
-
-        }
-
-        val spinnerArray: MutableList<String> = ArrayList()
-
-        spinnerArray.add("Низкая")
-        spinnerArray.add("Средняя")
-        spinnerArray.add("Высокая")
-
-        val adapter = ArrayAdapter(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, spinnerArray)
-
-        adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
-        val sItems: Spinner = binding.spinnerImportance
-        sItems.adapter = adapter
-
-        binding.spinnerImportance.setSelection(task.importance.value)
-        binding.editTextInfo.setText(task.info)
-        if (task.deadline != null) {
-            binding.switchDeadline.isChecked = true
-        }
-
-        binding.imageButton2.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_dark))
-        binding.textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_light))
-
-        binding.deleteLayout.setOnClickListener {
-            repository.tasks.removeAt(taskPosition)
-            repository.adapter.notifyItemRemoved(taskPosition)
-            closeFragment()
-        }
 
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("MyLog", "Destroyed edit fragment")
+    private fun setDefaultValues() {
+        binding.spinnerImportance.setSelection(viewModel.task.importance.value)
+        binding.editTextInfo.setText(viewModel.task.info)
+        if (viewModel.task.deadline != null) {
+            binding.switchDeadline.isChecked = true
+        }
+        binding.imageButton2.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_dark))
+        binding.textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_light))
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d("MyLog", "Paused edit fragment")
+    private fun setSpinner() {
+        val spinnerArray: MutableList<String> = ArrayList()
+
+        spinnerArray.add(resources.getString(R.string.low_importance))
+        spinnerArray.add(resources.getString(R.string.medium_importance))
+        spinnerArray.add(resources.getString(R.string.high_importance))
+
+        val adapter = ArrayAdapter(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, spinnerArray)
+        val sItems: Spinner = binding.spinnerImportance
+
+        adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
+        sItems.adapter = adapter
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = ListFragment()
+    private fun setListeners() {
+        binding.buttonClose.setOnClickListener {
+            closeFragment()
+        }
+
+        binding.textViewDate.setOnClickListener {
+            setDate()
+        }
+
+        binding.buttonSave.setOnClickListener {
+            viewModel.task.info = binding.editTextInfo.text.toString()
+            viewModel.task.editDate = Calendar.getInstance().time
+            if (binding.switchDeadline.isChecked) {
+                viewModel.task.deadline = viewModel.deadline.time
+            } else {
+                viewModel.task.deadline = null
+            }
+            listeners.onTaskEdited(taskPosition)
+            closeFragment()
+        }
+
+        binding.switchDeadline.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                setDate()
+            }
+        }
+        binding.deleteLayout.setOnClickListener {
+            if (viewModel.task.flag == Utils.Flag.DONE){
+                val a = viewModel.repository.numOfDone.value
+                if (a != null) {
+                    viewModel.repository.numOfDone.value = a - 1
+                }
+            }
+            viewModel.repository.tasks.removeAt(taskPosition)
+            listeners.onTaskDeleted(taskPosition)
+            closeFragment()
+        }
+    }
+
+    private fun setDate() {
+        DatePickerDialog(requireContext(), { _, year, month, day ->
+            viewModel.setDeadline(day, month, year)
+            binding.textViewDate.text =
+                String.format(SimpleDateFormat("dd.MM.yyyy", Locale.US).format(viewModel.deadline.time))
+        },
+            viewModel.currentTime.get(Calendar.YEAR),
+            viewModel.currentTime.get(Calendar.MONTH),
+            viewModel.currentTime.get(Calendar.DAY_OF_MONTH)
+        ).show()
+
     }
 
     private fun closeFragment() {
@@ -105,4 +126,10 @@ class EditTaskFragment(parentFragment: ListFragment, private val taskPosition: I
             .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
             .show(listFragment).commit()
     }
+
+    interface ClickListeners {
+        fun onTaskEdited(taskPosition: Int)
+        fun onTaskDeleted(taskPosition: Int)
+    }
+
 }

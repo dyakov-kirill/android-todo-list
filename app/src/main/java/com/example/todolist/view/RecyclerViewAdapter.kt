@@ -1,34 +1,36 @@
 package com.example.todolist.view
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.data.TodoItemsRepository
 import com.example.todolist.model.TodoItem
 import com.example.todolist.databinding.TaskCellBinding
+import com.example.todolist.model.Utils
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RecyclerViewAdapter(private val dataSet: List<TodoItem>,
-                          val listenerOpen: (taskPos: Int) -> Unit) :
+                          private val listeners : ClickListeners) :
     RecyclerView.Adapter<RecyclerViewAdapter.TaskHolder>() {
 
+
     class TaskHolder(private val binding: TaskCellBinding,
-                     val listenerOpen: (taskPos: Int) -> Unit
+                     private val listeners : ClickListeners
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-
             binding.button2.setOnClickListener {
-                listenerOpen(adapterPosition)
+                listeners.onOpenEditor(adapterPosition)
             }
 
-            binding.checkBox2.setOnCheckedChangeListener { button, isChecked ->
+            binding.checkBox2.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     val a = TodoItemsRepository.numOfDone.value
                     if (a != null) {
                         TodoItemsRepository.numOfDone.value = a + 1
                     }
+
                 } else {
                     val a = TodoItemsRepository.numOfDone.value
                     if (a != null) {
@@ -36,27 +38,32 @@ class RecyclerViewAdapter(private val dataSet: List<TodoItem>,
                     }
                 }
             }
-            Log.d("MyLog", "Holder created")
         }
 
         fun bind(item: TodoItem) {
             binding.taskInfo.text = item.info
-
+            if (item.deadline != null) {
+                binding.textViewDeadline.text = String.format("Выполнить до " +
+                        SimpleDateFormat("dd.MM.yyyy", Locale.US).format(item.deadline))
+            }
+            if (item.flag == Utils.Flag.DONE) {
+                binding.checkBox2.isChecked = true
+            }
         }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): TaskHolder {
-        // Create a new view, which defines the UI of the list item
         val view = TaskCellBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
-        Log.d("MyLog", "Holder created")
-        return TaskHolder(view, listenerOpen)
+        return TaskHolder(view, listeners)
     }
 
     override fun onBindViewHolder(taskHolder: TaskHolder, position: Int) {
         taskHolder.bind(dataSet[position])
-        Log.d("MyLog", "Task binded")
-
     }
 
     override fun getItemCount() = dataSet.size
+
+    interface ClickListeners {
+        fun onOpenEditor(taskPos: Int)
+    }
 }
