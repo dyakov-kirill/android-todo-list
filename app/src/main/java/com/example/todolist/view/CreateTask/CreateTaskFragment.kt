@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
 import com.example.todolist.R
-import com.example.todolist.data.TodoItemsRepository
 import com.example.todolist.databinding.FragmentTaskBinding
 import com.example.todolist.model.TodoItem
 import com.example.todolist.model.Utils
@@ -25,7 +24,7 @@ class CreateTaskFragment(private val listFragment: ListFragment) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CreateTaskViewModel::class.java)
+        viewModel = ViewModelProvider(this)[CreateTaskViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -71,7 +70,6 @@ class CreateTaskFragment(private val listFragment: ListFragment) : Fragment() {
                 Utils.NOT_DONE,
                 if (binding.switchDeadline.isChecked) viewModel.deadline.time else null,
                 viewModel.currentTime.time, viewModel.currentTime.time))
-            Log.d("MyLog", "Good button")
             closeFragment()
         }
 

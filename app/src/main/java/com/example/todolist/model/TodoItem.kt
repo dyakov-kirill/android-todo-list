@@ -1,6 +1,5 @@
 package com.example.todolist.model
 
-import com.example.todolist.model.Utils
 import java.util.*
 
 data class TodoItem(

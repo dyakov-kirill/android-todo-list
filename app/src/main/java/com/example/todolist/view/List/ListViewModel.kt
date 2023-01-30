@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class ListViewModel(application: Application) : AndroidViewModel(application) {
     val repository = TodoItemsRepository
-    val context = application
+    private val context = application
 
     fun initDatabase() {
         val taskDAO = TaskDatabase.getInstance(context).getTaskDao()

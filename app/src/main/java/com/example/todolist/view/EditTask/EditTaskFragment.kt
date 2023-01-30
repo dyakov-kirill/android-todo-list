@@ -27,7 +27,7 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(EditTaskViewModel::class.java)
+        viewModel = ViewModelProvider(this)[EditTaskViewModel::class.java]
     }
 
     override fun onCreateView(
