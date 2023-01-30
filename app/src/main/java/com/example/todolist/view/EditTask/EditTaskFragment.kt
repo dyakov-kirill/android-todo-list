@@ -1,4 +1,4 @@
-package com.example.todolist.view
+package com.example.todolist.view.EditTask
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -12,13 +12,15 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTaskBinding
+import com.example.todolist.model.TodoItem
+import com.example.todolist.model.TodoItemEntity
 import com.example.todolist.model.Utils
-import com.example.todolist.viewmodel.EditTaskViewModel
+import com.example.todolist.view.List.ListFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class EditTaskFragment(private val listFragment: ListFragment, private val taskPosition: Int, private val listeners: ClickListeners) : Fragment() {
+class EditTaskFragment(private val listFragment: ListFragment, private val taskId: Long) : Fragment() {
     private lateinit var binding : FragmentTaskBinding
 
     private lateinit var viewModel : EditTaskViewModel
@@ -33,20 +35,22 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskP
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTaskBinding.inflate(inflater)
-        viewModel.task = viewModel.repository.tasks[taskPosition]
-        setDefaultValues()
-        setListeners()
-        setSpinner()
-
-
+        viewModel.getTask(taskId).observe(this.viewLifecycleOwner) {
+            viewModel.task = TodoItemEntity.toModel(it)
+            setSpinner()
+            setDefaultValues(viewModel.task)
+            setListeners()
+        }
         return binding.root
     }
 
-    private fun setDefaultValues() {
-        binding.spinnerImportance.setSelection(viewModel.task.importance.value)
-        binding.editTextInfo.setText(viewModel.task.info)
-        if (viewModel.task.deadline != null) {
+    private fun setDefaultValues(item: TodoItem) {
+        binding.spinnerImportance.setSelection(item.importance)
+        binding.editTextInfo.setText(item.info)
+        if (item.deadline != null) {
             binding.switchDeadline.isChecked = true
+            binding.textViewDate.text =
+                String.format(SimpleDateFormat("dd.MM.yyyy", Locale.US).format(item.deadline!!.time))
         }
         binding.imageButton2.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_dark))
         binding.textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_light))
@@ -76,31 +80,36 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskP
         }
 
         binding.buttonSave.setOnClickListener {
-            viewModel.task.info = binding.editTextInfo.text.toString()
-            viewModel.task.editDate = Calendar.getInstance().time
-            if (binding.switchDeadline.isChecked) {
-                viewModel.task.deadline = viewModel.deadline.time
-            } else {
-                viewModel.task.deadline = null
-            }
-            listeners.onTaskEdited(taskPosition)
+            viewModel.updateTask(
+                TodoItem(
+                id = viewModel.task.id,
+                info = binding.editTextInfo.text.toString(),
+                importance = binding.spinnerImportance.selectedItemPosition,
+                flag = viewModel.task.flag,
+                if (binding.switchDeadline.isChecked) {
+                    viewModel.deadline.time
+                } else {
+                    null
+                }, createDate = viewModel.task.createDate,
+                    editDate = Calendar.getInstance().time))
             closeFragment()
         }
 
         binding.switchDeadline.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 setDate()
+            } else {
+                binding.textViewDate.text = ""
             }
         }
         binding.deleteLayout.setOnClickListener {
-            if (viewModel.task.flag == Utils.Flag.DONE){
+            if (viewModel.task.flag == Utils.DONE){
                 val a = viewModel.repository.numOfDone.value
                 if (a != null) {
                     viewModel.repository.numOfDone.value = a - 1
                 }
             }
-            viewModel.repository.tasks.removeAt(taskPosition)
-            listeners.onTaskDeleted(taskPosition)
+            viewModel.deleteTask(viewModel.task)
             closeFragment()
         }
     }
@@ -127,9 +136,5 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskP
             .show(listFragment).commit()
     }
 
-    interface ClickListeners {
-        fun onTaskEdited(taskPosition: Int)
-        fun onTaskDeleted(taskPosition: Int)
-    }
 
 }

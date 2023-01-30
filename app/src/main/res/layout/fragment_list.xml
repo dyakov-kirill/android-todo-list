@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ListFragment">
+    tools:context=".view.List.ListFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,9 +17,9 @@
             android:id="@+id/textViewHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
+            android:layout_marginStart="70dp"
             android:layout_marginTop="50dp"
-            android:gravity="center"
+            android:gravity="start"
             android:text="@string/header"
             android:textAlignment="textStart"
             android:textColor="?android:attr/textColor"
@@ -30,7 +30,7 @@
             android:id="@+id/textViewDone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
+            android:layout_marginStart="70dp"
             android:text="@string/done"
             android:textAlignment="textStart"
             android:textColor="?android:attr/textColorSecondary"
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:contentDescription="Add new task"
+        android:contentDescription="@string/create_task_btn"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/blue_dark"
         app:layout_constraintBottom_toBottomOf="parent"

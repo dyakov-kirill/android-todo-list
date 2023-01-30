@@ -2,6 +2,16 @@
     <string name="app_name">TODO List</string>
     <string name="header">Мои дела</string>
     <string name="done">Выполнено - %1$d</string>
+    <string name="save">Сохранить</string>
+    <string name="todo">Что надо сделать...</string>
+    <string name="importance">Важность</string>
+    <string name="make_until">Сделать до</string>
+    <string name="delete">Удалить</string>
+
+    <string name="create_task_btn">Add new task</string>
+    <string name="task_editor_btn">Open task editor</string>
+    <string name="close_creator_btn">Close creator</string>
+    <string name="delete_task_btn">Delete task</string>
 
     <string name="low_importance">Низкая</string>
     <string name="medium_importance">Средняя</string>

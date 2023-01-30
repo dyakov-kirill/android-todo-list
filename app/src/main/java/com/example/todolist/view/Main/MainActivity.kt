@@ -1,9 +1,10 @@
-package com.example.todolist.view
+package com.example.todolist.view.Main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.todolist.R
 import com.example.todolist.databinding.ActivityMainBinding
+import com.example.todolist.view.List.ListFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding

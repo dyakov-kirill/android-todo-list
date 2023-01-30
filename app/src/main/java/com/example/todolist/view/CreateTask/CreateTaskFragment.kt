@@ -1,7 +1,8 @@
-package com.example.todolist.view
+package com.example.todolist.view.CreateTask
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,11 @@ import com.example.todolist.data.TodoItemsRepository
 import com.example.todolist.databinding.FragmentTaskBinding
 import com.example.todolist.model.TodoItem
 import com.example.todolist.model.Utils
-import com.example.todolist.viewmodel.CreateTaskViewModel
+import com.example.todolist.view.List.ListFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CreateTaskFragment(private val listFragment: ListFragment,
-                         private val listeners: ClickListeners) : Fragment() {
+class CreateTaskFragment(private val listFragment: ListFragment) : Fragment() {
     private lateinit var binding : FragmentTaskBinding
     private lateinit var viewModel: CreateTaskViewModel
 
@@ -64,19 +64,22 @@ class CreateTaskFragment(private val listFragment: ListFragment,
         }
 
         binding.buttonSave.setOnClickListener {
-            listeners.onCreateTask(TodoItem(
-                TodoItemsRepository.tasks.size.toString(),
+            viewModel.addTask(TodoItem(
+                null,
                 binding.editTextInfo.text.toString(),
-                Utils.Importance.fromInt(binding.spinnerImportance.selectedItemPosition),
-                Utils.Flag.NOT_DONE,
+                binding.spinnerImportance.selectedItemPosition,
+                Utils.NOT_DONE,
                 if (binding.switchDeadline.isChecked) viewModel.deadline.time else null,
                 viewModel.currentTime.time, viewModel.currentTime.time))
+            Log.d("MyLog", "Good button")
             closeFragment()
         }
 
         binding.switchDeadline.setOnCheckedChangeListener { _, checked ->
             if (checked) {
                 setDate()
+            } else {
+                binding.textViewDate.text = ""
             }
         }
     }
@@ -101,9 +104,5 @@ class CreateTaskFragment(private val listFragment: ListFragment,
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
             .show(listFragment).commit()
-    }
-
-    interface ClickListeners {
-        fun onCreateTask(task: TodoItem)
     }
 }
