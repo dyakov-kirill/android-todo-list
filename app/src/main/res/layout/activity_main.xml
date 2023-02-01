@@ -7,50 +7,15 @@
     android:background="?attr/backgroundColor"
     tools:context=".view.Main.MainActivity">
 
-    <!-- <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
-
-        <TextView
-            android:id="@+id/textViewHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/header"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textViewDone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/done"
-            android:textAlignment="center" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="20dp">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-    </LinearLayout>-->
-
-    <FrameLayout
-        android:id="@+id/fragmentPlaceHolder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/backgroundColor"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </FrameLayout>
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav" />
 </androidx.constraintlayout.widget.ConstraintLayout>

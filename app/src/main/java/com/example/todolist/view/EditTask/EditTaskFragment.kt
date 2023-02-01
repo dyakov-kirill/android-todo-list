@@ -10,19 +10,18 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTaskBinding
 import com.example.todolist.model.TodoItem
 import com.example.todolist.model.TodoItemEntity
-import com.example.todolist.model.Utils
-import com.example.todolist.view.List.ListFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class EditTaskFragment(private val listFragment: ListFragment, private val taskId: Long) : Fragment() {
+class EditTaskFragment : Fragment() {
     private lateinit var binding : FragmentTaskBinding
-
+    private var taskId : Long = 0
     private lateinit var viewModel : EditTaskViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +34,7 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskI
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTaskBinding.inflate(inflater)
+        taskId = requireArguments().getInt("taskId").toLong()
         viewModel.getTask(taskId).observe(this.viewLifecycleOwner) {
             viewModel.task = TodoItemEntity.toModel(it)
             setSpinner()
@@ -72,7 +72,7 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskI
 
     private fun setListeners() {
         binding.buttonClose.setOnClickListener {
-            closeFragment()
+            Navigation.findNavController(binding.root).navigate(R.id.action_editTaskFragment_to_listFragment)
         }
 
         binding.textViewDate.setOnClickListener {
@@ -92,7 +92,7 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskI
                     null
                 }, createDate = viewModel.task.createDate,
                     editDate = Calendar.getInstance().time))
-            closeFragment()
+            Navigation.findNavController(binding.root).navigate(R.id.action_editTaskFragment_to_listFragment)
         }
 
         binding.switchDeadline.setOnCheckedChangeListener { _, checked ->
@@ -103,14 +103,8 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskI
             }
         }
         binding.deleteLayout.setOnClickListener {
-            if (viewModel.task.flag == Utils.DONE){
-                val a = viewModel.repository.numOfDone.value
-                if (a != null) {
-                    viewModel.repository.numOfDone.value = a - 1
-                }
-            }
             viewModel.deleteTask(viewModel.task)
-            closeFragment()
+            Navigation.findNavController(binding.root).navigate(R.id.action_editTaskFragment_to_listFragment)
         }
     }
 
@@ -126,15 +120,5 @@ class EditTaskFragment(private val listFragment: ListFragment, private val taskI
         ).show()
 
     }
-
-    private fun closeFragment() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            .remove(this).commit()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            .show(listFragment).commit()
-    }
-
 
 }

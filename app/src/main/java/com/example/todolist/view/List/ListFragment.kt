@@ -1,11 +1,13 @@
 package com.example.todolist.view.List
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -15,8 +17,6 @@ import com.example.todolist.databinding.FragmentListBinding
 import com.example.todolist.model.TodoItem
 import com.example.todolist.model.TodoItemEntity
 import com.example.todolist.model.Utils
-import com.example.todolist.view.CreateTask.CreateTaskFragment
-import com.example.todolist.view.EditTask.EditTaskFragment
 import com.example.todolist.view.List.RecyclerView.RecyclerViewAdapter
 import com.example.todolist.view.List.RecyclerView.SwipeToDeleteCallback
 
@@ -82,40 +82,62 @@ class ListFragment : Fragment(),
         }
 
         binding.createTaskButton.setOnClickListener {
-            closeFragment()
-            openCreator()
+            Navigation.findNavController(binding.root).navigate(R.id.action_listFragment_to_createTaskFragment)
+        }
+        registerForContextMenu(binding.buttonSetTheme)
+
+        binding.buttonSetTheme.setOnCreateContextMenuListener { contextMenu, _, _ ->
+            contextMenu.add(0, 0, 0, "Системная тема")
+            contextMenu.add(1, 1, 1, "Светлая тема")
+            contextMenu.add(2, 2, 2, "Темная тема")
+        }
+
+        binding.buttonSetTheme.setOnClickListener {
+            requireActivity().openContextMenu(it)
         }
     }
 
-    private fun closeFragment() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .hide(this)
-            .commit()
-
-    }
-
-    private fun openCreator() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            .add(R.id.fragmentPlaceHolder, CreateTaskFragment(this))
-            .commit()
-    }
 
     override fun onOpenEditor(taskPos: Int) {
-        closeFragment()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            .add(R.id.fragmentPlaceHolder, EditTaskFragment(this, taskPos.toLong()))
-            .commit()
+        val bundle = Bundle()
+        bundle.putInt("taskId", taskPos)
+        Navigation.findNavController(binding.root).navigate(R.id.action_listFragment_to_editTaskFragment,
+            bundle)
     }
 
-    override fun setItemFlag(taskId: Long, flag: Int) {
-        viewModel.setTaskFlag(taskId, flag)
+    override fun setItemFlag(task: Long, flag: Int) {
+        viewModel.setTaskFlag(task, flag)
     }
 
     override fun deleteItem(task: TodoItem) {
         viewModel.deleteTask(task)
     }
 
-
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            Utils.SYSTEM_THEME -> {
+                val sharedPreference =  requireActivity().getSharedPreferences("theme", Context.MODE_PRIVATE)
+                with (sharedPreference.edit()) {
+                    putInt("theme", Utils.SYSTEM_THEME).commit()
+                }
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_UNSPECIFIED)
+            }
+            Utils.LIGHT_THEME -> {
+                val sharedPreference =  requireActivity().getSharedPreferences("theme", Context.MODE_PRIVATE)
+                with (sharedPreference.edit()) {
+                    putInt("theme", Utils.LIGHT_THEME).commit()
+                }
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            Utils.DARK_THEME -> {
+                val sharedPreference =  requireActivity().getSharedPreferences("theme", Context.MODE_PRIVATE)
+                with (sharedPreference.edit()) {
+                    putInt("theme", Utils.DARK_THEME).commit()
+                }
+                Log.d("MyLog", sharedPreference.getInt("theme", -1).toString())
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+        }
+        return super.onContextItemSelected(item)
+    }
 }

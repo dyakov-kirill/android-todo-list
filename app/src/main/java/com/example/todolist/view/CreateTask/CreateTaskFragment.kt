@@ -2,7 +2,6 @@ package com.example.todolist.view.CreateTask
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +9,15 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTaskBinding
 import com.example.todolist.model.TodoItem
 import com.example.todolist.model.Utils
-import com.example.todolist.view.List.ListFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CreateTaskFragment(private val listFragment: ListFragment) : Fragment() {
+class CreateTaskFragment : Fragment() {
     private lateinit var binding : FragmentTaskBinding
     private lateinit var viewModel: CreateTaskViewModel
 
@@ -55,7 +54,7 @@ class CreateTaskFragment(private val listFragment: ListFragment) : Fragment() {
 
     private fun setListeners() {
         binding.buttonClose.setOnClickListener {
-            closeFragment()
+            Navigation.findNavController(binding.root).navigate(R.id.action_createTaskFragment_to_listFragment)
         }
 
         binding.textViewDate.setOnClickListener {
@@ -70,7 +69,7 @@ class CreateTaskFragment(private val listFragment: ListFragment) : Fragment() {
                 Utils.NOT_DONE,
                 if (binding.switchDeadline.isChecked) viewModel.deadline.time else null,
                 viewModel.currentTime.time, viewModel.currentTime.time))
-            closeFragment()
+            Navigation.findNavController(binding.root).navigate(R.id.action_createTaskFragment_to_listFragment)
         }
 
         binding.switchDeadline.setOnCheckedChangeListener { _, checked ->
@@ -93,14 +92,5 @@ class CreateTaskFragment(private val listFragment: ListFragment) : Fragment() {
             viewModel.currentTime.get(Calendar.DAY_OF_MONTH)
         ).show()
 
-    }
-
-    private fun closeFragment() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            .remove(this).commit()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            .show(listFragment).commit()
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/listFragment">
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.example.todolist.view.List.ListFragment"
+        android:label="fragment_list"
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_listFragment_to_editTaskFragment"
+            app:destination="@id/editTaskFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_createTaskFragment"
+            app:destination="@id/createTaskFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editTaskFragment"
+        android:name="com.example.todolist.view.EditTask.EditTaskFragment"
+        android:label="EditTaskFragment" >
+        <action
+            android:id="@+id/action_editTaskFragment_to_listFragment"
+            app:destination="@id/listFragment"
+            app:launchSingleTop="true" />
+        <argument
+            android:name="taskId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/createTaskFragment"
+        android:name="com.example.todolist.view.CreateTask.CreateTaskFragment"
+        android:label="fragment_task"
+        tools:layout="@layout/fragment_task" >
+        <action
+            android:id="@+id/action_createTaskFragment_to_listFragment"
+            app:destination="@id/listFragment"
+            app:launchSingleTop="true" />
+    </fragment>
+</navigation>

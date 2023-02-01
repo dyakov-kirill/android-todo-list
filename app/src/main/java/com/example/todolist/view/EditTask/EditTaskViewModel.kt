@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class EditTaskViewModel : ViewModel() {
-    val repository = TodoItemsRepository
+    private val repository = TodoItemsRepository
     val currentTime = Calendar.getInstance()
     val deadline = Calendar.getInstance()
     lateinit var task : TodoItem
