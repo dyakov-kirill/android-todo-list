@@ -91,6 +91,5 @@ class CreateTaskFragment : Fragment() {
             viewModel.currentTime.get(Calendar.MONTH),
             viewModel.currentTime.get(Calendar.DAY_OF_MONTH)
         ).show()
-
     }
 }

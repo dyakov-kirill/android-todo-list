@@ -38,19 +38,26 @@ class EditTaskFragment : Fragment() {
         viewModel.getTask(taskId).observe(this.viewLifecycleOwner) {
             viewModel.task = TodoItemEntity.toModel(it)
             setSpinner()
-            setDefaultValues(viewModel.task)
+            setDefaultValues(viewModel.task, savedInstanceState)
             setListeners()
         }
         return binding.root
     }
 
-    private fun setDefaultValues(item: TodoItem) {
-        binding.spinnerImportance.setSelection(item.importance)
-        binding.editTextInfo.setText(item.info)
-        if (item.deadline != null) {
-            binding.switchDeadline.isChecked = true
-            binding.textViewDate.text =
-                String.format(SimpleDateFormat("dd.MM.yyyy", Locale.US).format(item.deadline!!.time))
+    private fun setDefaultValues(item: TodoItem, bundle: Bundle?) {
+        if (bundle != null) {
+            binding.spinnerImportance.setSelection(bundle.getInt("importance"))
+            binding.editTextInfo.setText(bundle.getString("info"))
+            binding.textViewDate.text = bundle.getString("date")
+            binding.switchDeadline.isChecked = binding.textViewDate.text != ""
+        } else {
+            binding.spinnerImportance.setSelection(item.importance)
+            binding.editTextInfo.setText(item.info)
+            if (item.deadline != null) {
+                binding.switchDeadline.isChecked = true
+                binding.textViewDate.text =
+                    String.format(SimpleDateFormat("dd.MM.yyyy", Locale.US).format(item.deadline!!.time))
+            }
         }
         binding.imageButton2.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_dark))
         binding.textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_light))
@@ -121,4 +128,10 @@ class EditTaskFragment : Fragment() {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("info", binding.editTextInfo.text.toString())
+        outState.putInt("importance", binding.spinnerImportance.selectedItemPosition)
+        outState.putString("date", binding.textViewDate.text.toString())
+        super.onSaveInstanceState(outState)
+    }
 }

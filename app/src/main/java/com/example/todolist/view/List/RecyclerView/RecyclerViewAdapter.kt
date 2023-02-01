@@ -1,16 +1,10 @@
 package com.example.todolist.view.List.RecyclerView
 
 import android.graphics.Color
-import android.graphics.Paint
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StrikethroughSpan
-import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.todolist.R
 import com.example.todolist.model.TodoItem
 import com.example.todolist.databinding.TaskCellBinding
 import com.example.todolist.model.Utils
@@ -61,10 +55,8 @@ class RecyclerViewAdapter(private val listeners : ClickListeners) :
                     binding.textViewImportance.text = "!!  "
                     binding.textViewImportance.setTextColor(Color.RED)
                 }
-
             }
         }
-
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): TaskHolder {
@@ -96,6 +88,4 @@ class RecyclerViewAdapter(private val listeners : ClickListeners) :
         listeners.deleteItem(dataSet[position])
         notifyItemChanged(position)
     }
-
-
 }

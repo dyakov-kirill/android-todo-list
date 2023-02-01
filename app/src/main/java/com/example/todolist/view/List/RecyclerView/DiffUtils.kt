@@ -1,6 +1,5 @@
 package com.example.todolist.view.List.RecyclerView
 
-import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import com.example.todolist.model.TodoItem
 
@@ -44,7 +43,6 @@ class DiffUtils(
                 false
             }
             else -> {
-                Log.d("MyLog", "${oldList[oldItemPosition].id} and ${newList[newItemPosition].id} are the same")
                 true
             }
         }

@@ -2,7 +2,6 @@ package com.example.todolist.view.List
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
@@ -134,7 +133,6 @@ class ListFragment : Fragment(),
                 with (sharedPreference.edit()) {
                     putInt("theme", Utils.DARK_THEME).commit()
                 }
-                Log.d("MyLog", sharedPreference.getInt("theme", -1).toString())
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
         }
