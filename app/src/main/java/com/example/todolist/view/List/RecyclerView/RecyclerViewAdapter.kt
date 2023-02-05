@@ -46,7 +46,7 @@ class RecyclerViewAdapter(private val listeners : ClickListeners) :
             }
             binding.checkBox2.isChecked = item.flag == Utils.DONE
             when (item.importance) {
-                Utils.LOW -> binding.textViewImportance.text = ""
+                Utils.LOW -> binding.textViewImportance.text = "    "
                 Utils.MEDIUM -> {
                     binding.textViewImportance.setTextColor(Color.parseColor("#FF8000"))
                     binding.textViewImportance.text = "!   "

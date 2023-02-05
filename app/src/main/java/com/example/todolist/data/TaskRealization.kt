@@ -7,11 +7,10 @@ import com.example.todolist.model.TodoItemEntity
 
 class TaskRealization(private val taskDAO: TaskDAO) : TaskRepository {
     override val allTasks: LiveData<List<TodoItemEntity>>
-        get() = taskDAO.getAllTasks() //oItem(it.id, it.info, it.importance, it.flag, Date(it.deadline), Date(it.createDate), Date(it.editDate)) })
+        get() = taskDAO.getAllTasks()
 
     override suspend fun insertTask(task: TodoItemEntity) {
         taskDAO.insert(task)
-        Log.d("MyLog", "Inserted in db")
     }
 
     override suspend fun deleteTask(task: TodoItemEntity) {
