@@ -12,6 +12,18 @@
 * LiveData для отслеживания количества сделанных дел и хранения списка из базы данных
 * Kotlin Coroutines
 
-
+Главный экран
 
 ![List image](/img/list.jpg)
+
+Экран создания дела
+
+![Create task image](/img/create_task.jpg)
+
+Экран редактирования дела
+
+![Edit task image](/img/edit_task.jpg)
+
+Удаление дела свайпом
+
+![Swipe image](/img/swipe.jpg)
