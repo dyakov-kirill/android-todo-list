@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title">Мои дела</string>
+    <string name="app_name">Список дел</string>
+    <string name="number_of_done">Выполнено - %1$d</string>
+    <string name="fab_description">Добавить новую задачу</string>
+    <string name="visibility_btn_description">Скрыть выполненные задачи</string>
+    <string name="info_btn_description">Открыть информацию о задаче</string>
+    <string name="make_until">Сделать до %1$s</string>
+    <string name="save">Сохранить</string>
+    <string name="close_btn_description">Закрыть редактор</string>
+    <string name="editor_hint">Что надо сделать...</string>
+    <string name="title_priority">Важность</string>
+    <string name="delete">Удалить</string>
+    <string name="switch_make_until">Сделать до</string>
+</resources>

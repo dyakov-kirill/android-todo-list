@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">ToDo List</string>
+
+    <!-- List fragment resources -->
+    <string name="title">My tasks</string>
+    <string name="number_of_done">Done - %1$d</string>
+    <string name="fab_description">Add new task</string>
+    <string name="visibility_btn_description">Hide done tasks</string>
+    <string name="info_btn_description">Open task info</string>
+    <string name="make_until">Make until %1$s</string>
+    <string name="save">Save</string>
+    <string name="close_btn_description">Close editor</string>
+    <string name="editor_hint">What do you want to do...</string>
+    <string name="title_priority">Priority</string>
+    <string name="delete">Delete</string>
+    <string name="switch_make_until">Make until</string>
+</resources>
