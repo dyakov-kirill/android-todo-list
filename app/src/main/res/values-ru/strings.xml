@@ -9,7 +9,7 @@
     <string name="make_until">Сделать до %1$s</string>
     <string name="save">Сохранить</string>
     <string name="close_btn_description">Закрыть редактор</string>
-    <string name="editor_hint">Что надо сделать...</string>
+    <string name="editor_hint">Что надо сделать…</string>
     <string name="title_priority">Важность</string>
     <string name="delete">Удалить</string>
     <string name="switch_make_until">Сделать до</string>
