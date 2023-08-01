@@ -13,4 +13,8 @@
         <item name="android:statusBarColor">@color/back_primary</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="checkboxStyle">
+        <item name="colorAccent">@color/green</item>
+    </style>
 </resources>

@@ -7,5 +7,24 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.dyakov.todolist.ListFragment"
-        android:label="ListFragment" />
+        android:label="ListFragment" >
+        <action
+            android:id="@+id/action_listFragment_to_createFragment"
+            app:destination="@id/createFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_editFragment"
+            app:destination="@id/editFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="com.dyakov.todolist.CreateFragment"
+        android:label="CreateFragment" />
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="com.dyakov.todolist.EditFragment"
+        android:label="EditFragment" >
+        <argument
+            android:name="task"
+            app:argType="com.dyakov.todolist.TodoItem" />
+    </fragment>
 </navigation>
