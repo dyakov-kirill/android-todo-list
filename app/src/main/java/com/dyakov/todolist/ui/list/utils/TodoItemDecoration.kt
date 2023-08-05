@@ -1,4 +1,4 @@
-package com.dyakov.todolist
+package com.dyakov.todolist.ui.list.utils
 
 import android.graphics.Rect
 import android.view.View

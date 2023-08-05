@@ -1,7 +1,7 @@
-package com.dyakov.todolist
+package com.dyakov.todolist.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.dyakov.todolist.TodoItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -11,7 +11,7 @@ interface TodoItemDao {
     fun getAllTasks(): Flow<List<TodoItem>>
 
     @Query("SELECT * FROM tasks WHERE is_done=false")
-    fun getAllTasks2(): Flow<List<TodoItem>>
+    fun getDoneTasks(): Flow<List<TodoItem>>
 
     @Insert
     suspend fun addTask(item: TodoItem)

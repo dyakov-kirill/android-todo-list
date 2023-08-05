@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="16dp"
@@ -11,26 +12,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:includeFontPadding="false"
         android:maxLines="3"
         android:text=""
         android:textColor="@color/label_primary"
         android:textSize="16sp"
-        android:theme="@style/checkboxStyle"
+        android:button="@drawable/checkbox_drawable_filter"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/roboto"
+        android:gravity="start|fill_vertical"
+        android:includeFontPadding="false"
+        android:maxLines="3"
+        android:text="TextView"
+        android:textAlignment="textStart"
+        android:textColor="@color/label_primary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_info"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_task_info"
+        app:layout_constraintTop_toTopOf="@+id/button_info" />
 
     <TextView
         android:id="@+id/text_deadline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="-16dp"
+        android:fontFamily="@font/roboto"
         android:text="@string/make_until"
         android:textColor="@color/label_tertiary"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_task_info" />
+        app:layout_constraintEnd_toStartOf="@+id/button_info"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_task_info"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <ImageButton
         android:id="@+id/button_info"
@@ -38,8 +60,10 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:contentDescription="@string/info_btn_description"
-        app:layout_constraintBottom_toTopOf="@+id/text_deadline"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_info" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
-package com.dyakov.todolist
+package com.dyakov.todolist.ui.list.utils
 
 import androidx.recyclerview.widget.DiffUtil
+import com.dyakov.todolist.TodoItem
 
 class ListDiffUtil(
     private val oldList: List<TodoItem>,
@@ -17,6 +18,18 @@ class ListDiffUtil(
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return when {
             oldList[oldItemPosition].id != newList[newItemPosition].id -> {
+                false
+            }
+            oldList[oldItemPosition].description != newList[newItemPosition].description -> {
+                false
+            }
+            oldList[oldItemPosition].isDone != newList[newItemPosition].isDone -> {
+                false
+            }
+            oldList[oldItemPosition].priority != newList[newItemPosition].priority -> {
+                false
+            }
+            oldList[oldItemPosition].deadline != newList[newItemPosition].deadline -> {
                 false
             }
             else -> true

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.dyakov.todolist.ListFragment"
+        android:name="com.dyakov.todolist.ui.list.ListFragment"
         android:label="ListFragment" >
         <action
             android:id="@+id/action_listFragment_to_createFragment"
@@ -17,11 +17,11 @@
     </fragment>
     <fragment
         android:id="@+id/createFragment"
-        android:name="com.dyakov.todolist.CreateFragment"
+        android:name="com.dyakov.todolist.ui.create.CreateFragment"
         android:label="CreateFragment" />
     <fragment
         android:id="@+id/editFragment"
-        android:name="com.dyakov.todolist.EditFragment"
+        android:name="com.dyakov.todolist.ui.edit.EditFragment"
         android:label="EditFragment" >
         <argument
             android:name="task"

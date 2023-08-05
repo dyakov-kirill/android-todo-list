@@ -14,7 +14,4 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="checkboxStyle">
-        <item name="colorAccent">@color/green</item>
-    </style>
 </resources>

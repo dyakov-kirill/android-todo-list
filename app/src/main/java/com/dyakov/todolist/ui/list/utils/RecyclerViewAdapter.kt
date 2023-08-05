@@ -1,35 +1,30 @@
-package com.dyakov.todolist
+package com.dyakov.todolist.ui.list.utils
 
-import android.opengl.Visibility
 import android.text.SpannableStringBuilder
-import android.util.Log
+import android.text.SpannedString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.toSpannable
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.dyakov.todolist.R
+import com.dyakov.todolist.TodoItem
 import com.dyakov.todolist.databinding.ButtonAddNewBinding
 import com.dyakov.todolist.databinding.FragmentTaskBinding
+import com.dyakov.todolist.ui.list.ListFragmentDirections
 import java.util.*
 
 class RecyclerViewAdapter(val callbacks: Callbacks) : RecyclerView.Adapter<ViewHolder>() {
 
-    var list: List<TodoItem> = emptyList()
-//        set(newList) {
-//            val diffUtil = ListDiffUtil(newList, field)
-//            val diffResult = DiffUtil.calculateDiff(diffUtil)
-//            field = newList
-//          //  notifyDataSetChanged()
-//            diffResult.dispatchUpdatesTo(this)
-//        }
+    private var list: List<TodoItem> = emptyList()
 
     fun setNewList(newList: List<TodoItem>) {
         val diffUtil = ListDiffUtil(list, newList)
         val diffResult = DiffUtil.calculateDiff(diffUtil)
         list = newList
-      //  notifyDataSetChanged()
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -54,7 +49,14 @@ class RecyclerViewAdapter(val callbacks: Callbacks) : RecyclerView.Adapter<ViewH
             binding.buttonInfo.setOnClickListener {
                 callbacks.deleteTask(holdingItem)
             }
-            binding.checkboxTaskInfo.text = item.description
+
+            binding.textView.text = String
+                .format(binding.root.resources.getStringArray(R.array.priority_patterns_array)[item.priority.priority],
+                item.description).toSpannable()
+
+            binding.root.setOnClickListener {
+                binding.root.animate().scaleX(1.1F).scaleY(1.1F).start()
+            }
             binding.buttonInfo.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToEditFragment(holdingItem)
                 Navigation.findNavController(binding.root).navigate(action)
@@ -98,13 +100,16 @@ class RecyclerViewAdapter(val callbacks: Callbacks) : RecyclerView.Adapter<ViewH
         callbacks.deleteTask(item)
     }
 
+    fun onItemChecked(item: TodoItem) {
+        callbacks.updateTask(item.copy(isDone = true))
+    }
+
     companion object {
         const val VIEW_TYPE_TASK = 0
         const val VIEW_TYPE_BUTTON = 1
     }
 
     interface Callbacks {
-        fun addTask(item: TodoItem)
         fun deleteTask(item: TodoItem)
         fun updateTask(item: TodoItem)
     }
