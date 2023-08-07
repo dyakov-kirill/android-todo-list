@@ -8,16 +8,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<S> : ViewModel() {
+    abstract val initialState: S
 
-    private val _state by lazy { MutableStateFlow(initialState) }
-    val state: StateFlow<S>
-        get() = _state.asStateFlow()
-
+    protected val _uiState by lazy { MutableStateFlow(initialState) }
+    val uiState: StateFlow<S>
+        get() = _uiState.asStateFlow()
 
     protected fun setState(block: S.() -> S) = viewModelScope.launch {
-        val currentState = state.value
-        _state.emit(block(currentState))
+        val currentState = uiState.value
+        _uiState.emit(block(currentState))
     }
-
-    abstract val initialState: S
 }

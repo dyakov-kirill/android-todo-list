@@ -2,7 +2,6 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/back_primary">
@@ -51,7 +50,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:height="100dp"
             android:autofillHints=""
             android:background="@drawable/rect_bordered"
             android:backgroundTint="@color/back_secondary"
@@ -59,9 +57,11 @@
             android:gravity="top|start"
             android:hint="@string/editor_hint"
             android:inputType="textMultiLine"
+            android:minLines="3"
             android:padding="16dp"
             android:textColor="@color/label_primary"
             android:textColorHint="@color/label_tertiary"
+            android:textCursorDrawable="@drawable/edittext_cursor"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +105,7 @@
 
         <View
             android:id="@+id/separator_1"
-            android:layout_width="391dp"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -147,30 +147,11 @@
             android:id="@+id/separator_2"
             android:layout_width="0dp"
             android:layout_height="1dp"
+            android:layout_marginTop="43dp"
             android:background="@color/support_separator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline4" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="230dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="231dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="230dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="328dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/switch_deadline" />
 
         <TextView
             android:id="@+id/text_delete"

@@ -5,40 +5,37 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dyakov.todolist.R
 import com.dyakov.todolist.TodoItem
+import com.dyakov.todolist.collectOnLifecycle
 import com.dyakov.todolist.databinding.FragmentListBinding
-import com.dyakov.todolist.ui.list.utils.RecyclerViewAdapter
-import com.dyakov.todolist.ui.list.utils.TaskTouchHelper
-import com.dyakov.todolist.ui.list.utils.TodoItemDecoration
-import com.dyakov.todolist.ui.list.viewmodel.ListViewModelImpl
+import com.dyakov.todolist.ui.list.adapter.RecyclerViewAdapter
+import com.dyakov.todolist.ui.list.adapter.TaskTouchHelper
+import com.dyakov.todolist.ui.list.adapter.TodoItemDecoration
+import com.dyakov.todolist.ui.list.viewmodel.ListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
+
+/**
+ * The screen that displays the created tasks and the buttons for creating a task
+ */
 @AndroidEntryPoint
 class ListFragment : Fragment(), RecyclerViewAdapter.Callbacks {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val recyclerViewAdapter = RecyclerViewAdapter(this)
-    private val viewModel: ListViewModelImpl by viewModels()
+    private val viewModel: ListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getTasks()
-                viewModel.uiState.collect {
-                    renderData(it.data)
-                }
-            }
+        viewModel.uiState.collectOnLifecycle(this) {
+            renderData(it.data)
         }
     }
 
@@ -59,7 +56,6 @@ class ListFragment : Fragment(), RecyclerViewAdapter.Callbacks {
         ItemTouchHelper(TaskTouchHelper(recyclerViewAdapter)).attachToRecyclerView(this)
     }
 
-
     private fun initListeners() = with(binding) {
         fabAdd.setOnClickListener {
             Navigation.findNavController(root)
@@ -71,31 +67,32 @@ class ListFragment : Fragment(), RecyclerViewAdapter.Callbacks {
     }
 
     private fun renderData(list: List<TodoItem>) {
-        recyclerViewAdapter.setNewList(list)
+        recyclerViewAdapter.list = list
         var numOfDone = 0
         list.forEach { item -> if (item.isDone) numOfDone++ }
         binding.textDone.text = String.format(resources.getString(R.string.number_of_done), numOfDone)
         if (!viewModel.uiState.value.isDoneHidden) {
-            binding.buttonHide.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_visibility_on
-                )
-            )
+            setHideButtonDrawable(R.drawable.ic_visibility_on)
         } else {
-            binding.buttonHide.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_visibility_off
-                )
-            )
+            setHideButtonDrawable(R.drawable.ic_visibility_off)
         }
     }
+
+    private fun setHideButtonDrawable(@DrawableRes drawable: Int) = with(binding) {
+        buttonHide.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                drawable
+            )
+        )
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    /** Adapter callbacks */
     override fun deleteTask(item: TodoItem) {
         viewModel.deleteTask(item)
     }

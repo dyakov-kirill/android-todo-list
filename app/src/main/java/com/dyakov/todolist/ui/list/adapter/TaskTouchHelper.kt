@@ -1,4 +1,4 @@
-package com.dyakov.todolist.ui.list.utils
+package com.dyakov.todolist.ui.list.adapter
 
 import android.graphics.Canvas
 import androidx.core.content.ContextCompat
@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.dyakov.todolist.R
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
-
 
 class TaskTouchHelper(private val adapter: RecyclerViewAdapter) : ItemTouchHelper.Callback() {
     override fun getMovementFlags(
@@ -33,7 +32,6 @@ class TaskTouchHelper(private val adapter: RecyclerViewAdapter) : ItemTouchHelpe
         when (direction) {
             ItemTouchHelper.END -> {
                 adapter.onItemChecked((viewHolder as RecyclerViewAdapter.TaskHolder).holdingItem)
-               // adapter.notifyItemChanged(viewHolder.layoutPosition)
             }
             ItemTouchHelper.START -> {
                 adapter.onItemDismiss((viewHolder as RecyclerViewAdapter.TaskHolder).holdingItem)

@@ -9,7 +9,7 @@ import java.util.Date
 
 @Entity(tableName = "tasks")
 data class TodoItem(
-    @PrimaryKey()
+    @PrimaryKey
     val id: String,
     val description: String,
     val priority: Priority,
@@ -29,8 +29,7 @@ data class TodoItem(
         Date(parcel.readLong()),
         Date(parcel.readLong()),
         Date(parcel.readLong())
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)

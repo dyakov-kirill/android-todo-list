@@ -11,5 +11,4 @@ data class EditUiState(
     val deadline: Date? = null,
     val isDeadlineSet: Boolean = false,
     val creationTime: Date = Date(0)
-) {
-}
+)

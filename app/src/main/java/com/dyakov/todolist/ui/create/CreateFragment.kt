@@ -11,16 +11,15 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.dyakov.todolist.*
 import com.dyakov.todolist.databinding.FragmentEditBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.util.*
 
+/**
+ * A fragment which creates new task
+ */
 @AndroidEntryPoint
 class CreateFragment : Fragment() {
     private var _binding: FragmentEditBinding? = null
@@ -29,12 +28,8 @@ class CreateFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    setFragmentState(it)
-                }
-            }
+        viewModel.uiState.collectOnLifecycle(this) {
+            setFragmentState(it)
         }
     }
 
@@ -58,17 +53,9 @@ class CreateFragment : Fragment() {
             viewModel.updateDescription(text.toString())
         }
         switchDeadline.setOnClickListener {
-            if (switchDeadline.isChecked) {
-                val dialog = DatePickerDialog(requireContext())
-                dialog.setOnDateSetListener { _, y, m, d ->
-                    val c = Calendar.getInstance()
-                    c.set(y, m, d)
-                    viewModel.setDeadline(c)
-                }
-                dialog.setOnCancelListener { binding.switchDeadline.isChecked = false }
-                dialog.show()
-            } else {
-                viewModel.removeDeadline()
+            when(switchDeadline.isChecked) {
+                true -> createDatePickerDialog()
+                false -> viewModel.removeDeadline()
             }
         }
         prioritySpinner.onItemSelectedListener = getSpinnerListener()
@@ -100,18 +87,16 @@ class CreateFragment : Fragment() {
         }
     }
 
-    private fun setFragmentState(state: CreateUiState) {
-        with(binding) {
-            if (state.description != editTask.text.toString()) {
-                editTask.setText(state.description)
-                editTask.setSelection(state.description.length - 1)
-            }
-            prioritySpinner.setSelection(state.priority.priority)
-            if (state.isDeadlineSet && state.deadline != null) {
-                showDeadline(state.deadline)
-            } else {
-                hideDeadline()
-            }
+    private fun setFragmentState(state: CreateUiState) = with(binding) {
+        if (state.description != editTask.text.toString()) {
+            editTask.setText(state.description)
+            editTask.setSelection(state.description.length - 1)
+        }
+        prioritySpinner.setSelection(state.priority.priority)
+        if (state.deadline != null) {
+            showDeadline(state.deadline)
+        } else {
+            hideDeadline()
         }
     }
 
@@ -131,5 +116,14 @@ class CreateFragment : Fragment() {
 
     private fun hideDeadline() {
         binding.textCurrentDeadline.visibility = View.INVISIBLE
+    }
+
+    private fun createDatePickerDialog() = DatePickerDialog(requireContext()).apply {
+        setOnDateSetListener { _, y, m, d ->
+            val c = Calendar.getInstance().apply { set(y, m, d) }
+            viewModel.setDeadline(c)
+        }
+        setOnCancelListener { binding.switchDeadline.isChecked = false }
+        show()
     }
 }

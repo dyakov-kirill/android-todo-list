@@ -1,10 +1,9 @@
-package com.dyakov.todolist.ui.list.utils
+package com.dyakov.todolist.ui.list.adapter
 
-import android.text.SpannableStringBuilder
-import android.text.SpannedString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.text.toSpannable
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
@@ -17,53 +16,50 @@ import com.dyakov.todolist.databinding.FragmentTaskBinding
 import com.dyakov.todolist.ui.list.ListFragmentDirections
 import java.util.*
 
+/**
+ * The adapter for ListFragment list
+ */
 class RecyclerViewAdapter(val callbacks: Callbacks) : RecyclerView.Adapter<ViewHolder>() {
+    var list: List<TodoItem> = emptyList()
+        set(newList) {
+            val diffUtil = ListDiffUtil(list, newList)
+            val diffResult = DiffUtil.calculateDiff(diffUtil)
+            field = newList
+            diffResult.dispatchUpdatesTo(this)
+        }
 
-    private var list: List<TodoItem> = emptyList()
-
-    fun setNewList(newList: List<TodoItem>) {
-        val diffUtil = ListDiffUtil(list, newList)
-        val diffResult = DiffUtil.calculateDiff(diffUtil)
-        list = newList
-        diffResult.dispatchUpdatesTo(this)
-    }
-
-    inner class TaskHolder(val binding: FragmentTaskBinding) : ViewHolder(binding.root) {
+    inner class TaskHolder(private val binding: FragmentTaskBinding) : ViewHolder(binding.root) {
         lateinit var holdingItem: TodoItem
-        fun bind(item: TodoItem) {
+        fun bind(item: TodoItem) = with(binding) {
             holdingItem = item
-            binding.checkboxTaskInfo.isChecked = item.isDone
+            checkboxTaskInfo.isChecked = item.isDone
             if (item.deadline == null) {
-                binding.textDeadline.visibility = View.GONE
-                binding.textDeadline.text = ""
+                textDeadline.visibility = View.GONE
+                textDeadline.text = ""
             } else {
-                val c = Calendar.getInstance()
-                c.time = item.deadline
-                binding.textDeadline.text = String
-                    .format(binding.root.context.resources.getString(R.string.date_pattern),
+                val c = Calendar.getInstance().apply { time = item.deadline }
+                textDeadline.text = String
+                    .format(
+                        binding.root.context.resources.getString(R.string.date_pattern),
                         c.get(Calendar.DAY_OF_MONTH),
-                        binding.root.resources.getStringArray(R.array.month_array)[c.get(Calendar.MONTH)],
-                        c.get(Calendar.YEAR))
-                binding.textDeadline.visibility = View.VISIBLE
+                        root.resources.getStringArray(R.array.month_array)[c.get(Calendar.MONTH)],
+                        c.get(Calendar.YEAR)
+                    )
+                textDeadline.visibility = View.VISIBLE
             }
-            binding.buttonInfo.setOnClickListener {
+            buttonInfo.setOnClickListener {
                 callbacks.deleteTask(holdingItem)
             }
-
-            binding.textView.text = String
-                .format(binding.root.resources.getStringArray(R.array.priority_patterns_array)[item.priority.priority],
+            // TODO ()
+            textView.text = String
+                .format(root.resources.getStringArray(R.array.priority_patterns_array)[item.priority.priority],
                 item.description).toSpannable()
-
-            binding.root.setOnClickListener {
-                binding.root.animate().scaleX(1.1F).scaleY(1.1F).start()
-            }
-            binding.buttonInfo.setOnClickListener {
+            buttonInfo.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToEditFragment(holdingItem)
-                Navigation.findNavController(binding.root).navigate(action)
+                Navigation.findNavController(root).navigate(action)
             }
-            binding.checkboxTaskInfo.setOnCheckedChangeListener { _, c ->
-                if (c) callbacks.updateTask(holdingItem.copy(isDone = true))
-                else callbacks.updateTask(holdingItem.copy(isDone = false))
+            checkboxTaskInfo.setOnCheckedChangeListener { _, c ->
+                callbacks.updateTask(holdingItem.copy(isDone = c))
             }
         }
     }

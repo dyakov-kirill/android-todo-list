@@ -8,5 +8,4 @@ data class CreateUiState(
     val priority: Priority = Priority.NO,
     val deadline: Date? = null,
     val isDeadlineSet: Boolean = false
-) {
-}
+)
