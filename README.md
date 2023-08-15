@@ -29,6 +29,6 @@
 
 Свайпы
 
-<img src="/assets/delete.png" alt="delete" width="400"/>
-<img src="/assets/check.png" alt="check" width="400"/>
+<img src="/assets/delete.jpg" alt="delete" width="400"/>
+<img src="/assets/check.jpg" alt="check" width="400"/>
 
