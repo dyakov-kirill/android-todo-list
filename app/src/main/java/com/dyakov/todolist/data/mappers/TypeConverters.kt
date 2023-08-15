@@ -1,7 +1,8 @@
-package com.dyakov.todolist
+package com.dyakov.todolist.data.mappers
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
+import com.dyakov.todolist.domain.models.Priority
 import java.util.Date
 
 @ProvidedTypeConverter

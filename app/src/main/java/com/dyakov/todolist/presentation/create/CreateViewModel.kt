@@ -1,20 +1,21 @@
-package com.dyakov.todolist.ui.create
+package com.dyakov.todolist.presentation.create
 
 import androidx.lifecycle.viewModelScope
-import com.dyakov.todolist.Priority
-import com.dyakov.todolist.TodoItem
-import com.dyakov.todolist.data.TaskRepository
-import com.dyakov.todolist.ui.BaseViewModel
+import com.dyakov.todolist.domain.TodoItemInteractor
+import com.dyakov.todolist.domain.models.Priority
+import com.dyakov.todolist.domain.models.TodoItem
+import com.dyakov.todolist.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 
 /**
  * ViewModel for CreateFragment
  */
 @HiltViewModel
-class CreateViewModel @Inject constructor(private val repository: TaskRepository) : BaseViewModel<CreateUiState>() {
+class CreateViewModel @Inject constructor(private val interactor: TodoItemInteractor) : BaseViewModel<CreateUiState>() {
     override val initialState: CreateUiState = CreateUiState()
 
     fun updateDescription(description: String) {
@@ -43,7 +44,9 @@ class CreateViewModel @Inject constructor(private val repository: TaskRepository
         null
     )
 
-    fun saveTask() = viewModelScope.launch {
-        repository.addTask(createItem())
+    fun saveTask() {
+        viewModelScope.launch {
+            interactor.addTask(createItem())
+        }
     }
 }

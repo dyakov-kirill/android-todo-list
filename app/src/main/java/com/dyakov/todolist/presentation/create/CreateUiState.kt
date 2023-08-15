@@ -1,6 +1,6 @@
-package com.dyakov.todolist.ui.create
+package com.dyakov.todolist.presentation.create
 
-import com.dyakov.todolist.Priority
+import com.dyakov.todolist.domain.models.Priority
 import java.util.*
 
 data class CreateUiState(

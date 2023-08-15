@@ -1,4 +1,4 @@
-package com.dyakov.todolist.ui.activities
+package com.dyakov.todolist.presentation.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import com.dyakov.todolist.R

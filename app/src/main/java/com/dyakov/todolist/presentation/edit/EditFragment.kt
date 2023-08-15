@@ -1,33 +1,41 @@
-package com.dyakov.todolist.ui.create
+package com.dyakov.todolist.presentation.edit
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import com.dyakov.todolist.*
+import androidx.navigation.fragment.navArgs
+import com.dyakov.todolist.domain.models.Priority
+import com.dyakov.todolist.R
+import com.dyakov.todolist.collectOnLifecycle
 import com.dyakov.todolist.databinding.FragmentEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+
 /**
- * A fragment which creates new task
+ * A screen which can edit task options
  */
 @AndroidEntryPoint
-class CreateFragment : Fragment() {
+class EditFragment : Fragment() {
     private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: CreateViewModel by viewModels()
+
+    private val args: EditFragmentArgs by navArgs()
+    private val viewModel: EditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.setBasicState(args.task)
         viewModel.uiState.collectOnLifecycle(this) {
             setFragmentState(it)
         }
@@ -40,6 +48,16 @@ class CreateFragment : Fragment() {
         _binding = FragmentEditBinding.inflate(inflater, container, false)
         initSpinner()
         setListeners()
+        initDeleteButton()
+        binding.scrollView2.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+            Log.d("MyLog", "$i $i2 $i3 $i4")
+            if (i2 == 0) {
+                binding.appBarLayout.elevation = 0f
+            } else {
+                binding.appBarLayout.elevation = 70f
+            }
+
+        }
         return binding.root
     }
 
@@ -60,7 +78,7 @@ class CreateFragment : Fragment() {
         }
         prioritySpinner.onItemSelectedListener = getSpinnerListener()
         textSave.setOnClickListener {
-            viewModel.saveTask()
+            viewModel.updateTask()
             Navigation.findNavController(binding.root).navigateUp()
         }
         binding.buttonClose.setOnClickListener {
@@ -78,7 +96,8 @@ class CreateFragment : Fragment() {
             binding.prioritySpinner.adapter = adapter
         }
     }
-    private fun getSpinnerListener() = object : OnItemSelectedListener {
+
+    private fun getSpinnerListener() = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) {
         }
 
@@ -87,7 +106,7 @@ class CreateFragment : Fragment() {
         }
     }
 
-    private fun setFragmentState(state: CreateUiState) = with(binding) {
+    private fun setFragmentState(state: EditUiState) = with(binding) {
         if (state.description != editTask.text.toString()) {
             editTask.setText(state.description)
             editTask.setSelection(state.description.length - 1)
@@ -100,10 +119,10 @@ class CreateFragment : Fragment() {
         }
     }
 
-    private fun showDeadline(deadline: Date) {
-        val c = Calendar.getInstance()
-        c.time = deadline
-        binding.textCurrentDeadline.text = String.format(
+    private fun showDeadline(deadline: Date) = with(binding) {
+        val c = Calendar.getInstance().apply { time = deadline }
+        switchDeadline.isChecked = true
+        textCurrentDeadline.text = String.format(
             resources.getString(
                 R.string.date_pattern
             ),
@@ -111,11 +130,18 @@ class CreateFragment : Fragment() {
             resources.getStringArray(R.array.month_array)[c.get(Calendar.MONTH)],
             c.get(Calendar.YEAR)
         )
-        binding.textCurrentDeadline.visibility = View.VISIBLE
+        textCurrentDeadline.visibility = View.VISIBLE
     }
 
     private fun hideDeadline() {
         binding.textCurrentDeadline.visibility = View.INVISIBLE
+    }
+
+    private fun initDeleteButton() = with(binding) {
+        binding.textDelete.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+        binding.textDelete.compoundDrawables[0].setTint(ContextCompat.getColor(requireContext(),
+            R.color.red
+        ))
     }
 
     private fun createDatePickerDialog() = DatePickerDialog(requireContext()).apply {

@@ -21,7 +21,7 @@
     </string-array>
     <string-array name="priority_patterns_array">
         <item>%1$s</item>
-        <item>|low| %1$s</item>
-        <item><font fgcolor="@color/red">!!</font> %1$s</item>
+        <item>↓ %1$s</item>
+        <item>!! %1$s</item>
     </string-array>
 </resources>

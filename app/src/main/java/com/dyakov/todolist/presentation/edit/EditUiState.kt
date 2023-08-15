@@ -1,6 +1,6 @@
-package com.dyakov.todolist.ui.edit
+package com.dyakov.todolist.presentation.edit
 
-import com.dyakov.todolist.Priority
+import com.dyakov.todolist.domain.models.Priority
 import java.util.*
 
 data class EditUiState(

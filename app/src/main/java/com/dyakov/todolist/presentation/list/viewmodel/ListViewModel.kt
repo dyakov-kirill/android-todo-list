@@ -1,9 +1,9 @@
-package com.dyakov.todolist.ui.list.viewmodel
+package com.dyakov.todolist.presentation.list.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.dyakov.todolist.TodoItem
-import com.dyakov.todolist.data.TaskRepository
-import com.dyakov.todolist.ui.BaseViewModel
+import com.dyakov.todolist.domain.TodoItemInteractor
+import com.dyakov.todolist.domain.models.TodoItem
+import com.dyakov.todolist.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.cancellable
@@ -14,14 +14,14 @@ import javax.inject.Inject
  * ViewModel for ListFragment
  */
 @HiltViewModel
-class ListViewModel @Inject constructor(private val repository: TaskRepository) : BaseViewModel<ListUiState>() {
+class ListViewModel @Inject constructor(private val interactor: TodoItemInteractor) : BaseViewModel<ListUiState>() {
 
     override val initialState: ListUiState = ListUiState(emptyList(), false)
     private var getTasksJob: Job? = null
 
     init {
         getTasksJob = viewModelScope.launch {
-            repository.getAllTasks().cancellable().collect {
+            interactor.getAllTasks().cancellable().collect {
                 _uiState.value = _uiState.value.copy(data = it)
             }
         }
@@ -33,12 +33,12 @@ class ListViewModel @Inject constructor(private val repository: TaskRepository) 
         getTasksJob = viewModelScope.launch {
             when (uiState.value.isDoneHidden) {
                 false -> {
-                    repository.getAllTasks().cancellable().collect {
+                    interactor.getAllTasks().cancellable().collect {
                         setState { copy(data = it) }
                     }
                 }
                 true -> {
-                    repository.getDoneTasks().cancellable().collect {
+                    interactor.getDoneTasks().cancellable().collect {
                         setState { copy(data = it) }
                     }
                 }
@@ -46,11 +46,15 @@ class ListViewModel @Inject constructor(private val repository: TaskRepository) 
         }
     }
 
-    fun updateTask(item: TodoItem) = viewModelScope.launch {
-        repository.updateTask(item)
+    fun updateTask(item: TodoItem) {
+        viewModelScope.launch {
+            interactor.updateTask(item)
+        }
     }
 
-    fun deleteTask(item: TodoItem) = viewModelScope.launch {
-        repository.deleteTask(item)
+    fun deleteTask(item: TodoItem) {
+        viewModelScope.launch {
+            interactor.deleteTask(item)
+        }
     }
 }

@@ -1,9 +1,9 @@
-package com.dyakov.todolist.data
+package com.dyakov.todolist.domain.repositories
 
-import com.dyakov.todolist.TodoItem
+import com.dyakov.todolist.domain.models.TodoItem
 import kotlinx.coroutines.flow.Flow
 
-interface TaskRepository {
+interface TodoItemRepository {
     fun getAllTasks(): Flow<List<TodoItem>>
 
     fun getDoneTasks(): Flow<List<TodoItem>>

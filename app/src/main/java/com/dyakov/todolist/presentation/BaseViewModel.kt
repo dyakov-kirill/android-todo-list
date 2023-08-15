@@ -1,4 +1,4 @@
-package com.dyakov.todolist.ui
+package com.dyakov.todolist.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

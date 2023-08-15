@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="top"
     android:paddingStart="16dp"
     android:paddingEnd="16dp">
 
@@ -12,34 +12,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:button="@drawable/checkbox_drawable_filter"
         android:includeFontPadding="false"
         android:maxLines="3"
         android:text=""
         android:textColor="@color/label_primary"
         android:textSize="16sp"
-        android:button="@drawable/checkbox_drawable_filter"
-        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/CheckboxStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:fontFamily="@font/roboto"
-        android:gravity="start|fill_vertical"
+        android:gravity="start|top"
         android:includeFontPadding="false"
         android:maxLines="3"
         android:text="TextView"
         android:textAlignment="textStart"
         android:textColor="@color/label_primary"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/button_info"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/checkbox_task_info"
-        app:layout_constraintTop_toTopOf="@+id/button_info" />
+        app:layout_constraintTop_toTopOf="@+id/checkbox_task_info" />
 
     <TextView
         android:id="@+id/text_deadline"
@@ -58,13 +59,13 @@
         android:id="@+id/button_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/info_btn_description"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/checkbox_task_info"
         app:srcCompat="@drawable/ic_info"
-        app:tint="@color/label_tertiary"/>
+        app:tint="@color/label_tertiary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

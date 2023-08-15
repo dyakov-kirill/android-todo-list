@@ -1,4 +1,4 @@
-package com.dyakov.todolist.ui.list.adapter
+package com.dyakov.todolist.presentation.list.adapter
 
 import android.graphics.Canvas
 import androidx.core.content.ContextCompat

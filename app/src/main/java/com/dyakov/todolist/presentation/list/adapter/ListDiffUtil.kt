@@ -1,7 +1,7 @@
-package com.dyakov.todolist.ui.list.adapter
+package com.dyakov.todolist.presentation.list.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.dyakov.todolist.TodoItem
+import com.dyakov.todolist.domain.models.TodoItem
 
 class ListDiffUtil(
     private val oldList: List<TodoItem>,

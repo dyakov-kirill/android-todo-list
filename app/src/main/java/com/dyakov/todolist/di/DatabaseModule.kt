@@ -2,10 +2,9 @@ package com.dyakov.todolist.di
 
 import android.content.Context
 import androidx.room.Room
-import com.dyakov.todolist.TypeConverters
 import com.dyakov.todolist.data.Database
-import com.dyakov.todolist.data.TaskRepository
-import com.dyakov.todolist.data.TaskRoomStorage
+import com.dyakov.todolist.data.TodoItemDao
+import com.dyakov.todolist.data.mappers.TypeConverters
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,12 +16,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DatabaseModule {
 
+/*    @Provides
+    @Singleton
+    fun provideRepository(dao: TodoItemDao) : TodoItemRepository {
+        return TodoItemRepositoryImpl(dao)
+    }*/
+
     @Provides
     @Singleton
-    fun provideRepository(@ApplicationContext context: Context) : TaskRepository {
-        val database = Room.databaseBuilder(context, Database::class.java, "task_database").addTypeConverter(
-            TypeConverters()
-        ).build()
-        return TaskRoomStorage(database.getTaskDao())
+    fun provideDatabase(@ApplicationContext context: Context) : Database {
+        return Room.databaseBuilder(context, Database::class.java, "task_database")
+            .addTypeConverter(TypeConverters())
+            .build()
+    }
+
+    @Provides
+    fun provideDao(database: Database) : TodoItemDao {
+        return database.getTaskDao()
     }
 }

@@ -1,4 +1,4 @@
-package com.dyakov.todolist
+package com.dyakov.todolist.domain.models
 
 enum class Priority(val priority: Int) {
     NO(0),

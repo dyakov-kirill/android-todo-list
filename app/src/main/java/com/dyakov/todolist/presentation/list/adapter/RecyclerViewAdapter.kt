@@ -1,20 +1,25 @@
-package com.dyakov.todolist.ui.list.adapter
+package com.dyakov.todolist.presentation.list.adapter
 
+import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.text.toSpannable
+import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.dyakov.todolist.R
-import com.dyakov.todolist.TodoItem
 import com.dyakov.todolist.databinding.ButtonAddNewBinding
 import com.dyakov.todolist.databinding.FragmentTaskBinding
-import com.dyakov.todolist.ui.list.ListFragmentDirections
-import java.util.*
+import com.dyakov.todolist.domain.models.Priority
+import com.dyakov.todolist.domain.models.TodoItem
+import com.dyakov.todolist.presentation.list.ListFragmentDirections
+import java.util.Calendar
+
 
 /**
  * The adapter for ListFragment list
@@ -50,10 +55,25 @@ class RecyclerViewAdapter(val callbacks: Callbacks) : RecyclerView.Adapter<ViewH
             buttonInfo.setOnClickListener {
                 callbacks.deleteTask(holdingItem)
             }
-            // TODO ()
-            textView.text = String
-                .format(root.resources.getStringArray(R.array.priority_patterns_array)[item.priority.priority],
-                item.description).toSpannable()
+            val spannable: Spannable = SpannableString(String.format(root.resources
+                .getStringArray(R.array.priority_patterns_array)[holdingItem.priority.priority], holdingItem.description))
+
+            when (holdingItem.priority) {
+                Priority.HIGH -> {
+                    spannable.setSpan(ForegroundColorSpan(Color.RED), 0, 2,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                Priority.LOW -> {
+                    spannable.setSpan(ForegroundColorSpan(Color.GRAY), 0, 2,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                else -> {}
+            }
+
+
+            textView.setText(spannable, TextView.BufferType.SPANNABLE)
+
+
             buttonInfo.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToEditFragment(holdingItem)
                 Navigation.findNavController(root).navigate(action)
