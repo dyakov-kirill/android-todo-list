@@ -17,18 +17,18 @@
 
 Главный экран
 
-<img src="/assets/list.jpg" alt="list" width="200"/>
+<img src="/assets/list.jpg" alt="list" width="400"/>
 
 Экран создания дела
 
-<img src="/assets/create.jpg" alt="create" width="200"/>
+<img src="/assets/create.jpg" alt="create" width="400"/>
 
 Экран редактирования дела
 
-<img src="/assets/edit.jpg" alt="edit" width="200"/>
+<img src="/assets/edit.jpg" alt="edit" width="400"/>
 
 Свайпы
 
-<img src="/assets/delete.png" alt="delete" width="200"/>
-<img src="/assets/check.png" alt="check" width="200"/>
+<img src="/assets/delete.png" alt="delete" width="400"/>
+<img src="/assets/check.png" alt="check" width="400"/>
 
