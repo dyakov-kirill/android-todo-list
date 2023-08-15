@@ -69,11 +69,7 @@ class RecyclerViewAdapter(val callbacks: Callbacks) : RecyclerView.Adapter<ViewH
                 }
                 else -> {}
             }
-
-
             textView.setText(spannable, TextView.BufferType.SPANNABLE)
-
-
             buttonInfo.setOnClickListener {
                 val action = ListFragmentDirections.actionListFragmentToEditFragment(holdingItem)
                 Navigation.findNavController(root).navigate(action)
@@ -117,7 +113,7 @@ class RecyclerViewAdapter(val callbacks: Callbacks) : RecyclerView.Adapter<ViewH
     }
 
     fun onItemChecked(item: TodoItem) {
-        callbacks.updateTask(item.copy(isDone = true))
+        callbacks.updateTask(item.copy(isDone = !item.isDone))
     }
 
     companion object {

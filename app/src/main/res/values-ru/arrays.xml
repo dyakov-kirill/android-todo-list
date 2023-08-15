@@ -2,8 +2,8 @@
 <resources>
     <string-array name="priority_array">
         <item>Нет</item>
-        <item>Низкий</item>
-        <item><font fgcolor="@color/red">!! Высокий</font></item>
+        <item>Низкая</item>
+        <item><font fgcolor="@color/red">!! Высокая</font></item>
     </string-array>
     <string-array name="month_array">
         <item>Январь</item>

@@ -24,6 +24,7 @@
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">@color/blue</item>
         <item name="colorAccent">@color/blue</item>
+        <item name="colorOnPrimary">@color/blue</item>
     </style>
     <style name="CheckboxStyle" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
         <item name="buttonTint">@color/checbox_color_filter</item>
